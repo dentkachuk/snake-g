@@ -58,11 +58,32 @@ function Update () {
 		snake.cells.pop();
 	}
 
+	// draw apple
+	ctx.fillStyle = secondary;
+	ctx.fillRect(apple.x, apple.y, grid - 1, grid - 1);
+
+	// draw snake
 	ctx.fillStyle = primary;
 	snake.cells.forEach(function(cell, index) {
-		ctx.fillRect(cell.x, cell.y, grid-1, grid-1);
+		ctx.fillRect(cell.x, cell.y, grid - 1, grid - 1);
 	});
 }
+
+document.addEventListener("keydown", function (event) {
+	if (event.which === 37 && snake.vx === 0) {
+		snake.xy = -grid;
+		snake.vy = 0;
+	} else if (event.which === 38 && snake.vy === 0) {
+		snake.vy = -grid;
+		snake.vx = 0;
+	} else if (event.which === 39 && snake.vx === 0) {
+		snake.vx = grid;
+		snake.vy = 0;
+	} else if (event.which === 40 && snake.vy === 0) {
+		snake.vy = grid;
+		snake.vx = 0;
+	}
+})
 
 // start the game
 requestAnimationFrame(Update);
