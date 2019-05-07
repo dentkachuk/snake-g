@@ -6,6 +6,7 @@ let secondary = "#577399";
 
 const grid = 32;
 let count = 0;
+let score = 0;
 
 let snake = {
 	x: grid * 5,
@@ -20,8 +21,8 @@ let snake = {
 };
 
 let apple = {
-	x: grid * 10,
-	y: grid * 10
+	x: getRandomInt(0, 24) * grid,
+	y: getRandomInt(0, 14) * grid
 };
 
 function Update () {
@@ -66,12 +67,37 @@ function Update () {
 	ctx.fillStyle = primary;
 	snake.cells.forEach(function(cell, index) {
 		ctx.fillRect(cell.x, cell.y, grid - 1, grid - 1);
+
+		if (cell.x === apple.x && cell.y === apple.y) {
+			snake.maxCells++;
+			score++;
+
+			apple.x = getRandomInt(0, 24) * grid;
+			apple.y = getRandomInt(0, 14) * grid;
+		}
+
+		for (let i = index + 1; i < snake.cells.length; i++) {
+			if (cell.x === snake.cells[i].x && cell.y === snake.cells[i].y) {
+				window.location.reload();
+			}
+		}
 	});
+
+	// Draw score
+	ctx.font = "72px Arial";
+	ctx.fillStyle = "rgba(87, 115, 153, .4)";
+	ctx.textAlign = "center";
+	ctx.textBaseline = "middle";
+	ctx.fillText(score, canvas.width / 2, canvas.height / 2);
+}
+
+function getRandomInt (min, max) {
+	return Math.floor(Math.random() * (max - min)) + min;
 }
 
 document.addEventListener("keydown", function (event) {
 	if (event.which === 37 && snake.vx === 0) {
-		snake.xy = -grid;
+		snake.vx = -grid;
 		snake.vy = 0;
 	} else if (event.which === 38 && snake.vy === 0) {
 		snake.vy = -grid;
